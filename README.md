@@ -4,6 +4,20 @@ Dentro de Mars Society Argentina tenemos la necesidad de compartir enlaces a nue
 
 Para esto contamos con el dominio https://tmsa.ar que funciona como acortador de vínculos. Por defecto redirige el tráfico a nuestra [página web][MarsSociety] sin embargo a través de este repositorio es posible agregar nuevos enlaces de acceso rápido, en muy poco tiempo.
 
+## Cómo funciona (en 30 segundos)
+
+No hay servidor ni base de datos. Todos los links viven en el archivo [`_redirects`](_redirects) (una línea por link: `/código  URL`). Al hacer push a `main`, [Netlify](https://www.netlify.com) despliega el sitio y `tmsa.ar/código` pasa a redirigir a la URL larga. Todo lo que no tenga regla propia cae en el comodín `/*` y va al mismo camino de [argentina.marssociety.org](http://argentina.marssociety.org/).
+
+El comando `tmsa` (instalación abajo) solo automatiza editar `_redirects` + commit + push. También se puede agregar un link editando el archivo a mano.
+
+## Documentación
+
+- [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md): cómo funciona cada pieza, qué hace el CLI y qué datos viven fuera del repo (cuenta de Netlify, DNS, dominio).
+- [docs/OPERACION.md](docs/OPERACION.md): agregar, cambiar y borrar links, problemas frecuentes, cómo reconstruir el servicio desde cero y checklist de traspaso.
+- [docs/NETLIFY.md](docs/NETLIFY.md): evaluación de Netlify (costos, límites, riesgos) y alternativas.
+
+> **Ojo:** `tmsa` hace `commit` y `push` sin pedir confirmación, a la rama en la que estés. Parado en `main`, el link queda publicado al instante.
+
 ## Instalación
 
 Para instalar este repositorio y poder agregar nuevos enlaces, deberás seguir los siguientes pasos:
@@ -61,13 +75,15 @@ npm link
 
 ### Si seguiste el paso 3
 
-Si has seguido el [paso 3](#3__link) podrás correr el siguiente comando en cualquier terminal:
+Si has seguido el [paso 3](#3-link) podrás correr el siguiente comando en cualquier terminal:
 
 ```sh
 tmsa [link] [name]
 ```
 
-Esto acortará el `link` a `https://tmsa.ar/name`
+Esto acortará el `link` a `https://tmsa.ar/name`. Si omitís `name`, se genera un código aleatorio de 5 caracteres. El link corto queda copiado en el portapapeles.
+
+Antes de usarlo: tené el árbol de git limpio (el comando commitea todos los cambios pendientes) y elegí un `name` que no coincida con un archivo del repo (`package.json`, `README.md`, `docs`, etc.). Más detalles en [docs/OPERACION.md](docs/OPERACION.md).
 
 ### Si NO seguiste el paso 3
 
